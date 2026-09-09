@@ -1,0 +1,122 @@
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Pencil</title>
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    font-family: Arial, sans-serif;
+  }
+
+  .container {
+    text-align: center;
+  }
+
+  /* Pencil */
+  .pencil {
+    position: relative;
+    width: 45px;
+    height: 180px;
+    margin: auto;
+  }
+
+  /* Main yellow body */
+  .body {
+    position: absolute;
+    left: 5px;
+    top: 25px;
+    width: 35px;
+    height: 120px;
+    background: #ffd84d;
+    border: 2px solid #d9a900;
+    box-sizing: border-box;
+  }
+
+  /* Pencil tip */
+  .tip {
+    position: absolute;
+    left: 5px;
+    top: 145px;
+    width: 35px;
+    height: 35px;
+    background: #e8b98b;
+    border-left: 2px solid #b87945;
+    border-right: 2px solid #b87945;
+    border-bottom: 2px solid #b87945;
+    box-sizing: border-box;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+  }
+
+  /* Graphite point */
+  .lead {
+    position: absolute;
+    left: 18px;
+    top: 166px;
+    width: 9px;
+    height: 14px;
+    background: #333;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+  }
+
+  /* Eraser */
+  .eraser {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    width: 35px;
+    height: 20px;
+    background: #f28b82;
+    border: 2px solid #c75d57;
+    border-radius: 5px 5px 2px 2px;
+    box-sizing: border-box;
+  }
+
+  /* Metal band */
+  .band {
+    position: absolute;
+    left: 5px;
+    top: 25px;
+    width: 35px;
+    height: 12px;
+    background: #c9c9c9;
+    border-left: 2px solid #999;
+    border-right: 2px solid #999;
+    box-sizing: border-box;
+  }
+
+  .name {
+    margin-top: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    color: orange;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="pencil">
+    <div class="eraser"></div>
+    <div class="band"></div>
+    <div class="body"></div>
+    <div class="tip"></div>
+    <div class="lead"></div>
+  </div>
+
+  <div class="name">Pencil</div>
+
+</div>
+
+</body>
+</html>
+```
