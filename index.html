@@ -1,122 +1,184 @@
-```html
 <!DOCTYPE html>
+
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pencil</title>
-
 <style>
-  body {
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: white;
-    font-family: Arial, sans-serif;
-  }
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  font-family: Arial, sans-serif;
+}
 
-  .container {
-    text-align: center;
-  }
+.container {
+text-align: center;
+cursor: pointer;
+user-select: none;
+}
 
-  /* Pencil */
-  .pencil {
-    position: relative;
-    width: 45px;
-    height: 180px;
-    margin: auto;
-  }
+.pencil {
+position: relative;
+width: 60px;
+height: 210px;
+margin: auto;
+overflow: hidden;
+}
 
-  /* Main yellow body */
-  .body {
-    position: absolute;
-    left: 5px;
-    top: 25px;
-    width: 35px;
-    height: 120px;
-    background: #ffd84d;
-    border: 2px solid #d9a900;
-    box-sizing: border-box;
-  }
+.body {
+position: absolute;
+left: 7px;
+top: 30px;
+width: 46px;
+height: 140px;
+background: #ffd84d;
+border: 2px solid #d5a900;
+box-sizing: border-box;
+}
 
-  /* Pencil tip */
-  .tip {
-    position: absolute;
-    left: 5px;
-    top: 145px;
-    width: 35px;
-    height: 35px;
-    background: #e8b98b;
-    border-left: 2px solid #b87945;
-    border-right: 2px solid #b87945;
-    border-bottom: 2px solid #b87945;
-    box-sizing: border-box;
-    clip-path: polygon(0 0, 100% 0, 50% 100%);
-  }
+.tip {
+position: absolute;
+left: 7px;
+top: 170px;
+width: 46px;
+height: 40px;
+background: #e5b27f;
+clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
 
-  /* Graphite point */
-  .lead {
-    position: absolute;
-    left: 18px;
-    top: 166px;
-    width: 9px;
-    height: 14px;
-    background: #333;
-    clip-path: polygon(0 0, 100% 0, 50% 100%);
-  }
+.lead {
+position: absolute;
+left: 25px;
+top: 194px;
+width: 10px;
+height: 16px;
+background: #333;
+clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
 
-  /* Eraser */
-  .eraser {
-    position: absolute;
-    left: 5px;
-    top: 5px;
-    width: 35px;
-    height: 20px;
-    background: #f28b82;
-    border: 2px solid #c75d57;
-    border-radius: 5px 5px 2px 2px;
-    box-sizing: border-box;
-  }
+.eraser {
+position: absolute;
+left: 7px;
+top: 5px;
+width: 46px;
+height: 25px;
+background: #f28b82;
+border: 2px solid #c75d57;
+border-radius: 6px 6px 2px 2px;
+box-sizing: border-box;
+}
 
-  /* Metal band */
-  .band {
-    position: absolute;
-    left: 5px;
-    top: 25px;
-    width: 35px;
-    height: 12px;
-    background: #c9c9c9;
-    border-left: 2px solid #999;
-    border-right: 2px solid #999;
-    box-sizing: border-box;
-  }
+.band {
+position: absolute;
+left: 7px;
+top: 30px;
+width: 46px;
+height: 14px;
+background: linear-gradient(
+to right,
+#999,
+#eee,
+#aaa,
+#eee,
+#999
+);
+border: 1px solid #888;
+box-sizing: border-box;
+z-index: 3;
+}
 
-  .name {
-    margin-top: 15px;
-    font-size: 28px;
-    font-weight: bold;
-    color: orange;
-  }
+.shine {
+position: absolute;
+top: -30px;
+left: -70px;
+width: 22px;
+height: 270px;
+background: rgba(255,255,255,0.85);
+transform: rotate(20deg);
+pointer-events: none;
+opacity: 0;
+z-index: 10;
+}
+
+.pencil.shining .shine {
+animation: shine 0.6s ease-out;
+}
+
+@keyframes shine {
+0% {
+left: -70px;
+opacity: 0;
+}
+20% {
+opacity: 1;
+}
+100% {
+left: 110px;
+opacity: 0;
+}
+}
+
+.name {
+margin-top: 15px;
+font-size: 28px;
+font-weight: bold;
+color: orange;
+}
+
+.name.flash {
+color: white;
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="container" id="button">
 
-  <div class="pencil">
+  <div class="pencil" id="pencil">
     <div class="eraser"></div>
     <div class="band"></div>
     <div class="body"></div>
     <div class="tip"></div>
     <div class="lead"></div>
+    <div class="shine"></div>
   </div>
 
-  <div class="name">Pencil</div>
+  <div class="name" id="name">Pencil</div>
 
 </div>
 
+<script>
+const button = document.getElementById("button");
+const pencil = document.getElementById("pencil");
+const name = document.getElementById("name");
+
+button.addEventListener("click", function() {
+
+  name.classList.remove("flash");
+  void name.offsetWidth;
+  name.classList.add("flash");
+
+  pencil.classList.remove("shining");
+  void pencil.offsetWidth;
+  pencil.classList.add("shining");
+
+  setTimeout(function() {
+    name.classList.remove("flash");
+  }, 130);
+
+  setTimeout(function() {
+    pencil.classList.remove("shining");
+  }, 650);
+
+});
+</script>
+
 </body>
 </html>
-```
