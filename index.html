@@ -112,8 +112,8 @@ body {
 .pencil::after {
   content: "";
   position: absolute;
-  top: -55px;
-  left: 62px;
+  top: 225px;
+  left: -75px;
   width: 16px;
   height: 300px;
   background: rgba(255,255,255,.95);
@@ -124,23 +124,13 @@ body {
 }
 
 .pencil.shine::after {
-  animation: shineSweep .7s ease-out;
+  animation: shineSweep 1.4s linear;
 }
 
 @keyframes shineSweep {
-  0% {
-    top: -55px;
-    left: 62px;
-    opacity: 0;
-  }
-  12% {
-    opacity: 1;
-  }
-  100% {
-    top: 95px;
-    left: -105px;
-    opacity: 0;
-  }
+  0% { top: 225px; left: -75px; opacity: 0; }
+  12% { opacity: 1; }
+  100% { top: -80px; left: 60px; opacity: 0; }
 }
 
 .name {
@@ -184,8 +174,8 @@ function activate() {
   name.classList.add("flash");
   pencil.classList.add("shine");
 
-  setTimeout(() => name.classList.remove("flash"), 160);
-  setTimeout(() => pencil.classList.remove("shine"), 600);
+  setTimeout(() => name.classList.remove("flash"), 500);
+  setTimeout(() => pencil.classList.remove("shine"), 1500);
 }
 
 button.addEventListener("pointerdown", activate);
