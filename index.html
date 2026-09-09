@@ -1,157 +1,172 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pencil</title>
 <style>
-body {
+* { box-sizing: border-box; }
+
+html, body {
+  width: 100%;
+  height: 100%;
   margin: 0;
-  height: 100vh;
+}
+
+body {
   display: flex;
-  justify-content: center;
   align-items: center;
-  background: white;
+  justify-content: center;
+  background: black;
   font-family: Arial, sans-serif;
 }
 
-.container {
-text-align: center;
-cursor: pointer;
-user-select: none;
+#button {
+  width: 150px;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .pencil {
-position: relative;
-width: 60px;
-height: 210px;
-margin: auto;
-overflow: hidden;
+  position: relative;
+  width: 70px;
+  height: 230px;
+  margin: 0 auto;
+  overflow: hidden;
 }
 
 .body {
-position: absolute;
-left: 7px;
-top: 30px;
-width: 46px;
-height: 140px;
-background: #ffd84d;
-border: 2px solid #d5a900;
-box-sizing: border-box;
+  position: absolute;
+  left: 9px;
+  top: 38px;
+  width: 52px;
+  height: 145px;
+  background: #ffd84d;
+  border: 2px solid #c99d00;
 }
 
-.tip {
-position: absolute;
-left: 7px;
-top: 170px;
-width: 46px;
-height: 40px;
-background: #e5b27f;
-clip-path: polygon(0 0, 100% 0, 50% 100%);
+.body::before,
+.body::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 7px;
+  height: 100%;
+  background: rgba(255,255,255,.28);
 }
 
-.lead {
-position: absolute;
-left: 25px;
-top: 194px;
-width: 10px;
-height: 16px;
-background: #333;
-clip-path: polygon(0 0, 100% 0, 50% 100%);
-}
+.body::before { left: 7px; }
+.body::after { right: 7px; }
 
 .eraser {
-position: absolute;
-left: 7px;
-top: 5px;
-width: 46px;
-height: 25px;
-background: #f28b82;
-border: 2px solid #c75d57;
-border-radius: 6px 6px 2px 2px;
-box-sizing: border-box;
+  position: absolute;
+  left: 9px;
+  top: 8px;
+  width: 52px;
+  height: 30px;
+  background: #f28b82;
+  border: 2px solid #c85f59;
+  border-radius: 7px 7px 3px 3px;
+  z-index: 2;
 }
 
 .band {
-position: absolute;
-left: 7px;
-top: 30px;
-width: 46px;
-height: 14px;
-background: linear-gradient(
-to right,
-#999,
-#eee,
-#aaa,
-#eee,
-#999
-);
-border: 1px solid #888;
-box-sizing: border-box;
-z-index: 3;
+  position: absolute;
+  left: 9px;
+  top: 38px;
+  width: 52px;
+  height: 16px;
+  background: linear-gradient(90deg,#999,#eee,#aaa,#f5f5f5,#999);
+  border: 1px solid #888;
+  z-index: 3;
 }
 
-.shine {
-position: absolute;
-top: -30px;
-left: -70px;
-width: 22px;
-height: 270px;
-background: rgba(255,255,255,0.85);
-transform: rotate(20deg);
-pointer-events: none;
-opacity: 0;
-z-index: 10;
+.tip {
+  position: absolute;
+  left: 9px;
+  top: 183px;
+  width: 52px;
+  height: 45px;
+  background: #e6b27f;
+  border-left: 2px solid #b77743;
+  border-right: 2px solid #b77743;
+  clip-path: polygon(0 0,100% 0,50% 100%);
+  z-index: 2;
 }
 
-.pencil.shining .shine {
-animation: shine 0.6s ease-out;
+.lead {
+  position: absolute;
+  left: 29px;
+  top: 207px;
+  width: 12px;
+  height: 23px;
+  background: #333;
+  clip-path: polygon(0 0,100% 0,50% 100%);
+  z-index: 4;
 }
 
-@keyframes shine {
-0% {
-left: -70px;
-opacity: 0;
+.pencil::after {
+  content: "";
+  position: absolute;
+  top: -55px;
+  left: 62px;
+  width: 16px;
+  height: 300px;
+  background: rgba(255,255,255,.95);
+  transform: rotate(45deg);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 20;
 }
-20% {
-opacity: 1;
+
+.pencil.shine::after {
+  animation: shineSweep .7s ease-out;
 }
-100% {
-left: 110px;
-opacity: 0;
-}
+
+@keyframes shineSweep {
+  0% {
+    top: -55px;
+    left: 62px;
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  100% {
+    top: 95px;
+    left: -105px;
+    opacity: 0;
+  }
 }
 
 .name {
-margin-top: 15px;
-font-size: 28px;
-font-weight: bold;
-color: orange;
+  margin-top: 14px;
+  font-size: 30px;
+  font-weight: bold;
+  color: orange;
+  transition: none;
 }
 
 .name.flash {
-color: white;
+  color: white;
 }
-
 </style>
 </head>
 
 <body>
-
-<div class="container" id="button">
-
+<div id="button" role="button" aria-label="Pencil">
   <div class="pencil" id="pencil">
     <div class="eraser"></div>
     <div class="band"></div>
     <div class="body"></div>
     <div class="tip"></div>
     <div class="lead"></div>
-    <div class="shine"></div>
   </div>
-
   <div class="name" id="name">Pencil</div>
-
 </div>
 
 <script>
@@ -159,26 +174,21 @@ const button = document.getElementById("button");
 const pencil = document.getElementById("pencil");
 const name = document.getElementById("name");
 
-button.addEventListener("click", function() {
-
+function activate() {
   name.classList.remove("flash");
+  pencil.classList.remove("shine");
+
   void name.offsetWidth;
-  name.classList.add("flash");
-
-  pencil.classList.remove("shining");
   void pencil.offsetWidth;
-  pencil.classList.add("shining");
 
-  setTimeout(function() {
-    name.classList.remove("flash");
-  }, 130);
+  name.classList.add("flash");
+  pencil.classList.add("shine");
 
-  setTimeout(function() {
-    pencil.classList.remove("shining");
-  }, 650);
+  setTimeout(() => name.classList.remove("flash"), 160);
+  setTimeout(() => pencil.classList.remove("shine"), 600);
+}
 
-});
+button.addEventListener("pointerdown", activate);
 </script>
-
 </body>
 </html>
