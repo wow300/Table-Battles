@@ -14,14 +14,185 @@ html, body {
 }
 
 body {
-  display: flex;
+  background: black;
+  transition: background 0.8s ease;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+
+#scene {
+  position: fixed;
+  inset: 0;
+}
+
+
+#playerLabel {
+  display: none;
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 60;
+  color: #222;
+  font: bold 22px Arial, sans-serif;
+  text-shadow: 1px 1px 0 rgba(255,255,255,.35);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.in-game #playerLabel { display: block; }
+
+#menu {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 60;
+  padding: 10px 14px;
+  border: 2px solid #222;
+  border-radius: 10px;
+  background: #f4f4f4;
+  color: #222;
+  font: bold 15px Arial, sans-serif;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#menu:active { transform: scale(.96); }
+
+#attackButton {
+  display: none;
   align-items: center;
   justify-content: center;
-  background: black;
-  font-family: Arial, sans-serif;
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  z-index: 70;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  border: 4px solid #4b2816;
+  background: #a86435;
+  color: white;
+  font: bold 17px Arial, sans-serif;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  box-shadow: 0 5px 0 #4b2816, inset 0 5px 0 rgba(255,255,255,.12);
+}
+
+#attackButton:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 #4b2816, inset 0 5px 0 rgba(255,255,255,.12);
+}
+
+.in-game #attackButton.mobile-enabled { display: flex; }
+
+#moveLeftButton, #moveRightButton {
+  display: none;
+  position: absolute;
+  bottom: 24px;
+  z-index: 70;
+  width: 82px;
+  height: 82px;
+  border-radius: 50%;
+  border: 4px solid #4b2816;
+  background: #a86435;
+  color: white;
+  font: bold 28px Arial, sans-serif;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  box-shadow: 0 5px 0 #4b2816, inset 0 5px 0 rgba(255,255,255,.12);
+}
+
+#moveLeftButton { left: 24px; }
+#moveRightButton { left: 118px; }
+
+#moveLeftButton:active, #moveRightButton:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 #4b2816, inset 0 5px 0 rgba(255,255,255,.12);
+}
+
+.in-game #moveLeftButton.mobile-enabled,
+.in-game #moveRightButton.mobile-enabled { display: flex; }
+.in-game #menu { display: none; }
+
+#slash {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 170px;
+  height: 100px;
+  pointer-events: none;
+  z-index: 55;
+  transform-origin: 50% 50%;
+}
+
+#slash::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 40px;
+  width: 150px;
+  height: 14px;
+  border-radius: 50%;
+  border-top: 8px solid rgba(255,255,255,.95);
+  border-right: 8px solid rgba(255,255,255,.95);
+  transform: rotate(-18deg) skewX(-20deg);
+  filter: drop-shadow(0 0 5px rgba(255,255,255,.65));
+}
+
+#slash::after {
+  content: "";
+  position: absolute;
+  left: 38px;
+  top: 62px;
+  width: 105px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.7);
+  transform: rotate(-18deg);
+}
+
+#slash.show {
+  display: block;
+  animation: slashFlash .34s ease-out forwards;
+}
+
+#slash.face-up { --slash-angle: 0deg; }
+#slash.face-right { --slash-angle: 90deg; }
+#slash.face-down { --slash-angle: 180deg; }
+#slash.face-left { --slash-angle: -90deg; }
+
+@keyframes slashFlash {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(calc(var(--slash-angle, 0deg) - 25deg)) scale(.45);
+  }
+  12% { opacity: 1; }
+  52% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(calc(var(--slash-angle, 0deg) + 10deg)) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(calc(var(--slash-angle, 0deg) + 35deg)) scale(1.08);
+  }
 }
 
 #button {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   width: 150px;
   text-align: center;
   cursor: pointer;
@@ -29,6 +200,66 @@ body {
   -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+  transition: top 1s ease;
+  z-index: 30;
+}
+
+#table {
+  display: none;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 92%;
+  max-width: 1100px;
+  height: 220px;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.table-top {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 48px;
+  background: #8b542f;
+  border: 5px solid #5a321c;
+  border-radius: 8px;
+  box-shadow: inset 0 7px 0 rgba(255,255,255,.08);
+}
+
+.table-front {
+  position: absolute;
+  left: 0;
+  top: 42px;
+  width: 100%;
+  height: 28px;
+  background: #6d3d22;
+  border-left: 5px solid #4b2816;
+  border-right: 5px solid #4b2816;
+}
+
+.table-leg {
+  position: absolute;
+  top: 64px;
+  width: 48px;
+  height: 156px;
+  background: #704020;
+  border: 5px solid #4b2816;
+  border-top: 0;
+}
+
+.table-leg.left { left: 8%; }
+.table-leg.right { right: 8%; }
+
+.table-shine {
+  position: absolute;
+  left: 10%;
+  top: 11px;
+  width: 25%;
+  height: 5px;
+  background: rgba(255,220,170,.18);
+  border-radius: 5px;
 }
 
 .pencil {
@@ -37,6 +268,8 @@ body {
   height: 230px;
   margin: 0 auto;
   overflow: hidden;
+  transition: transform 1s ease;
+
 }
 
 .body {
@@ -133,6 +366,106 @@ body {
   100% { top: -80px; left: 60px; opacity: 0; }
 }
 
+.in-game {
+  background: #f3d34a;
+}
+
+.in-game #table {
+  display: block;
+}
+
+.in-game #button {
+  left: 50%;
+  top: calc(100% - 270px);
+  transform: translate(-50%, -50%);
+}
+
+.in-game .pencil {
+  transform: rotate(168deg) scale(.48);
+  transform-origin: center center;
+  animation: pencilIdle 2.4s ease-in-out infinite;
+}
+
+/* Keep the original idle motion, mirrored to match the facing direction. */
+.in-game .pencil.face-left { animation-name: pencilIdleLeft !important; }
+.in-game .pencil.face-right { animation-name: pencilIdleRight !important; }
+
+.in-game .name {
+  display: none;
+}
+
+@keyframes pencilIdle {
+  0%, 100% { transform: rotate(168deg) scale(.48); }
+  50% { transform: rotate(180deg) scale(.48); }
+}
+
+@keyframes pencilIdleLeft {
+  0%, 100% { transform: rotate(168deg) scale(.48); }
+  50% { transform: rotate(180deg) scale(.48); }
+}
+
+@keyframes pencilIdleRight {
+  0%, 100% { transform: rotate(192deg) scale(.48); }
+  50% { transform: rotate(180deg) scale(.48); }
+}
+
+.in-game .pencil.attacking { animation-duration: .34s !important; animation-timing-function: ease-out !important; animation-fill-mode: both !important; }
+.in-game .pencil.attacking.face-up { animation-name: pencilMeleeUp !important; }
+.in-game .pencil.attacking.face-left { animation-name: pencilMeleeLeft !important; }
+.in-game .pencil.attacking.face-right { animation-name: pencilMeleeRight !important; }
+.in-game .pencil.attacking.face-down { animation-name: pencilMeleeDown !important; }
+
+.in-game .pencil.moving-left { animation: pencilMoveLeft .38s ease-in-out infinite !important; }
+.in-game .pencil.moving-right { animation: pencilMoveRight .38s ease-in-out infinite !important; }
+
+@keyframes pencilMoveLeft {
+  0%, 100% { transform: rotate(168deg) translateY(0) scale(.48); }
+  50% { transform: rotate(145deg) translateY(-24px) scale(.48); }
+}
+
+@keyframes pencilMoveRight {
+  0%, 100% { transform: rotate(192deg) translateY(0) scale(.48); }
+  50% { transform: rotate(215deg) translateY(-24px) scale(.48); }
+}
+
+  35% { transform: rotate(210deg) translateX(28px) translateY(4px) scale(.48); }
+  70% { transform: rotate(200deg) translateX(48px) translateY(2px) scale(.48); }
+  100% { transform: rotate(192deg) translateX(55px) translateY(0) scale(.48); }
+}
+
+/* The swing always follows the pencil's facing direction: forward, then down. */
+@keyframes pencilMeleeUp {
+  0% { transform: rotate(168deg) scale(.48); }
+  32% { transform: rotate(135deg) scale(.48); }
+  58% { transform: rotate(112deg) scale(.48); }
+  78% { transform: rotate(145deg) scale(.48); }
+  100% { transform: rotate(168deg) scale(.48); }
+}
+
+@keyframes pencilMeleeLeft {
+  0% { transform: rotate(168deg) scale(.48); }
+  32% { transform: rotate(95deg) scale(.48); }
+  58% { transform: rotate(65deg) scale(.48); }
+  78% { transform: rotate(115deg) scale(.48); }
+  100% { transform: rotate(168deg) scale(.48); }
+}
+
+@keyframes pencilMeleeRight {
+  0% { transform: rotate(168deg) scale(.48); }
+  32% { transform: rotate(240deg) scale(.48); }
+  58% { transform: rotate(270deg) scale(.48); }
+  78% { transform: rotate(220deg) scale(.48); }
+  100% { transform: rotate(168deg) scale(.48); }
+}
+
+@keyframes pencilMeleeDown {
+  0% { transform: rotate(168deg) scale(.48); }
+  32% { transform: rotate(205deg) scale(.48); }
+  58% { transform: rotate(230deg) scale(.48); }
+  78% { transform: rotate(195deg) scale(.48); }
+  100% { transform: rotate(168deg) scale(.48); }
+}
+
 .name {
   margin-top: 14px;
   font-size: 30px;
@@ -148,26 +481,70 @@ body {
 </head>
 
 <body>
-<div id="button" role="button" aria-label="Pencil">
-  <div class="pencil" id="pencil">
-    <div class="eraser"></div>
-    <div class="band"></div>
-    <div class="body"></div>
-    <div class="tip"></div>
-    <div class="lead"></div>
+<div id="scene">
+  <div id="table">
+    <div class="table-top"></div>
+    <div class="table-front"></div>
+    <div class="table-leg left"></div>
+    <div class="table-leg right"></div>
+    <div class="table-shine"></div>
   </div>
-  <div class="name" id="name">Pencil</div>
+
+  <div id="playerLabel">Player 1: Pencil</div>
+
+  <button id="menu" type="button">Mobile Controls: OFF</button>
+
+  <div id="attackButton" role="button" aria-label="Melee attack">SWING</div>
+  <div id="moveLeftButton" role="button" aria-label="Move left">A</div>
+  <div id="moveRightButton" role="button" aria-label="Move right">D</div>
+  <div id="slash" aria-hidden="true"></div>
+
+  <div id="button" role="button" aria-label="Pencil">
+    <div class="pencil" id="pencil">
+      <div class="eraser"></div>
+      <div class="band"></div>
+      <div class="body"></div>
+      <div class="tip"></div>
+      <div class="lead"></div>
+    </div>
+    <div class="name" id="name">Pencil</div>
+  </div>
 </div>
 
 <script>
 const button = document.getElementById("button");
 const pencil = document.getElementById("pencil");
 const name = document.getElementById("name");
+const menu = document.getElementById("menu");
+const attackButton = document.getElementById("attackButton");
+const moveLeftButton = document.getElementById("moveLeftButton");
+const moveRightButton = document.getElementById("moveRightButton");
+const slash = document.getElementById("slash");
+let mobileControls = false;
+let attackLocked = false;
+let playerX = 0;
+let moveLeftHeld = false;
+let moveRightHeld = false;
+let lastMoveTime = 0;
+let moveFrame = null;
+let facing = "up";
+
+menu.addEventListener("click", () => {
+  mobileControls = !mobileControls;
+  menu.textContent = `Mobile Controls: ${mobileControls ? "ON" : "OFF"}`;
+  attackButton.classList.toggle("mobile-enabled", mobileControls);
+  moveLeftButton.classList.toggle("mobile-enabled", mobileControls);
+  moveRightButton.classList.toggle("mobile-enabled", mobileControls);
+});
 
 function activate() {
+  if (document.body.classList.contains("in-game")) {
+    meleeAttack();
+    return;
+  }
+
   name.classList.remove("flash");
   pencil.classList.remove("shine");
-
   void name.offsetWidth;
   void pencil.offsetWidth;
 
@@ -176,9 +553,163 @@ function activate() {
 
   setTimeout(() => name.classList.remove("flash"), 500);
   setTimeout(() => pencil.classList.remove("shine"), 1500);
+
+  setTimeout(() => {
+    document.body.classList.add("in-game");
+  }, 1450);
+}
+
+
+function movePlayer(direction, amount = 55) {
+  if (!document.body.classList.contains("in-game")) return;
+  playerX += direction * amount;
+  playerX = Math.max(-window.innerWidth * 0.38, Math.min(window.innerWidth * 0.38, playerX));
+  button.style.left = `calc(50% + ${playerX}px)`;
+}
+
+function updateMoveAnimation() {
+  const movingLeft = moveLeftHeld && !moveRightHeld;
+  const movingRight = moveRightHeld && !moveLeftHeld;
+  pencil.classList.toggle("moving-left", movingLeft);
+  pencil.classList.toggle("moving-right", movingRight);
+  if (movingLeft) facing = "left";
+  if (movingRight) facing = "right";
+  pencil.classList.toggle("face-left", facing === "left");
+  pencil.classList.toggle("face-right", facing === "right");
+}
+
+function startMoving(direction) {
+  if (!document.body.classList.contains("in-game")) return;
+  if (direction < 0) moveLeftHeld = true;
+  else moveRightHeld = true;
+  updateMoveAnimation();
+
+  if (!moveFrame) {
+    lastMoveTime = performance.now();
+    const loop = (now) => {
+      if (!moveLeftHeld && !moveRightHeld) {
+        moveFrame = null;
+        updateMoveAnimation();
+        return;
+      }
+      const dt = Math.min(40, now - lastMoveTime);
+      lastMoveTime = now;
+      if (moveLeftHeld && !moveRightHeld) movePlayer(-1, dt * 0.22);
+      if (moveRightHeld && !moveLeftHeld) movePlayer(1, dt * 0.22);
+      moveFrame = requestAnimationFrame(loop);
+    };
+    moveFrame = requestAnimationFrame(loop);
+  }
+}
+
+function stopMoving(direction) {
+  if (direction < 0) moveLeftHeld = false;
+  else moveRightHeld = false;
+  updateMoveAnimation();
+}
+
+function stopAllMovement() {
+  moveLeftHeld = false;
+  moveRightHeld = false;
+  updateMoveAnimation();
+}
+
+function positionSlash() {
+  const pencilRect = pencil.getBoundingClientRect();
+  const sceneRect = document.getElementById("scene").getBoundingClientRect();
+  const x = pencilRect.left - sceneRect.left + pencilRect.width / 2;
+  const y = pencilRect.top - sceneRect.top + pencilRect.height / 2;
+  slash.style.left = `${x}px`;
+  slash.style.top = `${y}px`;
+  slash.classList.remove("face-up", "face-left", "face-right", "face-down");
+  slash.classList.add(`face-${facing}`);
+}
+
+function meleeAttack() {
+  if (!document.body.classList.contains("in-game") || attackLocked) return;
+  attackLocked = true;
+
+  pencil.classList.remove("attacking");
+  slash.classList.remove("show");
+  void pencil.offsetWidth;
+  void slash.offsetWidth;
+
+  pencil.classList.remove("face-up", "face-left", "face-right", "face-down");
+  pencil.classList.add(`face-${facing}`);
+  positionSlash();
+  pencil.classList.add("attacking");
+  slash.classList.add("show");
+
+  const follow = () => {
+    if (slash.classList.contains("show")) {
+      positionSlash();
+      requestAnimationFrame(follow);
+    }
+  };
+  requestAnimationFrame(follow);
+
+  setTimeout(() => {
+    pencil.classList.remove("attacking");
+  }, 340);
+  setTimeout(() => slash.classList.remove("show"), 340);
+  setTimeout(() => attackLocked = false, 360);
 }
 
 button.addEventListener("pointerdown", activate);
+attackButton.addEventListener("pointerdown", (event) => {
+  event.preventDefault();
+  meleeAttack();
+});
+
+function bindHoldButton(element, direction) {
+  element.addEventListener("pointerdown", (event) => {
+    event.preventDefault();
+    element.setPointerCapture?.(event.pointerId);
+    startMoving(direction);
+  });
+  const stop = (event) => {
+    event?.preventDefault?.();
+    stopMoving(direction);
+  };
+  element.addEventListener("pointerup", stop);
+  element.addEventListener("pointercancel", stop);
+  element.addEventListener("lostpointercapture", stop);
+}
+
+bindHoldButton(moveLeftButton, -1);
+bindHoldButton(moveRightButton, 1);
+
+// Mouse click/keyboard-style pointer control in the arena: clicking the pencil swings it.
+pencil.addEventListener("pointerdown", (event) => {
+  if (document.body.classList.contains("in-game")) {
+    event.preventDefault();
+    meleeAttack();
+  }
+});
+
+// Space or Enter also performs the melee attack while playing.
+document.addEventListener("keydown", (event) => {
+  if (!document.body.classList.contains("in-game")) return;
+  if (event.code === "Space" || event.code === "Enter") {
+    event.preventDefault();
+    meleeAttack();
+  }
+  if (event.code === "KeyA") {
+    event.preventDefault();
+    startMoving(-1);
+  }
+  if (event.code === "KeyD") {
+    event.preventDefault();
+    startMoving(1);
+  }
+});
+
+document.addEventListener("keyup", (event) => {
+  if (event.code === "KeyA") stopMoving(-1);
+  if (event.code === "KeyD") stopMoving(1);
+});
+
+window.addEventListener("blur", stopAllMovement);
 </script>
 </body>
 </html>
