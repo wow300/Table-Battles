@@ -390,6 +390,50 @@ body {
 .in-game .pencil.face-left { animation-name: pencilIdleLeft !important; }
 .in-game .pencil.face-right { animation-name: pencilIdleRight !important; }
 
+#eraserChoice {
+  display: block;
+  position: absolute;
+  left: calc(50% + 170px);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 150px;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+#eraserChoice .eraser-shape {
+  width: 112px;
+  height: 72px;
+  margin: 0 auto;
+  background: #ff69b4;
+  border: 4px solid #c43d82;
+  border-radius: 18px;
+  box-shadow: inset 0 -8px 0 rgba(0,0,0,.12), 0 5px 0 rgba(0,0,0,.25);
+}
+
+#eraserChoice .eraser-label {
+  margin-top: 14px;
+  font-size: 30px;
+  font-weight: bold;
+  color: #ff69b4;
+}
+
+.in-game #eraserChoice { display: none; }
+
+#eraserChoice.selected .eraser-shape {
+  outline: 5px solid white;
+  outline-offset: 5px;
+}
+
+@media (max-width: 600px) {
+  #eraserChoice { left: calc(50% + 115px); transform: translate(-50%, -50%) scale(.78); }
+}
+
+.name {
+  display: block;
+}
+
 .in-game .name {
   display: none;
 }
@@ -509,6 +553,11 @@ body {
     </div>
     <div class="name" id="name">Pencil</div>
   </div>
+
+  <div id="eraserChoice" role="button" aria-label="Eraser">
+    <div class="eraser-shape"></div>
+    <div class="eraser-label">Eraser</div>
+  </div>
 </div>
 
 <script>
@@ -520,6 +569,7 @@ const attackButton = document.getElementById("attackButton");
 const moveLeftButton = document.getElementById("moveLeftButton");
 const moveRightButton = document.getElementById("moveRightButton");
 const slash = document.getElementById("slash");
+const eraserChoice = document.getElementById("eraserChoice");
 let mobileControls = false;
 let attackLocked = false;
 let playerX = 0;
@@ -535,6 +585,11 @@ menu.addEventListener("click", () => {
   attackButton.classList.toggle("mobile-enabled", mobileControls);
   moveLeftButton.classList.toggle("mobile-enabled", mobileControls);
   moveRightButton.classList.toggle("mobile-enabled", mobileControls);
+});
+
+eraserChoice.addEventListener("click", () => {
+  eraserChoice.classList.add("selected");
+  eraserChoice.querySelector(".eraser-label").style.textShadow = "0 0 8px white";
 });
 
 function activate() {
@@ -617,8 +672,13 @@ function stopAllMovement() {
 function positionSlash() {
   const pencilRect = pencil.getBoundingClientRect();
   const sceneRect = document.getElementById("scene").getBoundingClientRect();
-  const x = pencilRect.left - sceneRect.left + pencilRect.width / 2;
-  const y = pencilRect.top - sceneRect.top + pencilRect.height / 2;
+  let x = pencilRect.left - sceneRect.left + pencilRect.width / 2;
+  let y = pencilRect.top - sceneRect.top + pencilRect.height / 2;
+  const reach = Math.max(pencilRect.width, pencilRect.height) * 0.62;
+  if (facing === "up") y -= reach;
+  if (facing === "down") y += reach;
+  if (facing === "left") x -= reach;
+  if (facing === "right") x += reach;
   slash.style.left = `${x}px`;
   slash.style.top = `${y}px`;
   slash.classList.remove("face-up", "face-left", "face-right", "face-down");
